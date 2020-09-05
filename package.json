@@ -1,0 +1,15 @@
+{
+  "name": "shopee-coin-catcher",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "node ./src/app.js"
+  },
+  "dependencies": {
+    "axios": "^0.19.2",
+    "dotenv": "^8.2.0",
+    "ws": "^7.3.1"
+  }
+}
