@@ -3,13 +3,12 @@ require("dotenv").config();
 const live = require("../packages/live");
 
 const token = process.env.SHOPEE_TOKEN;
+const deviceId = process.env.SHOPEE_DEVICE_ID;
 
 (async () => {
   try {
     const dt = new Date();
     const ts = dt.getTime();
-
-    const deviceId = "TokuEep+VlA4b+xOgsjL6jmE+Z3MM9rmLVxY085z+Vg=";
 
     const options = {
       offset: 0,

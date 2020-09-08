@@ -81,6 +81,75 @@ const harvestCrop = ({ token, deviceId, cropId }) => {
     .catch((err) => err.response.data);
 };
 
+const helpFriend = ({
+  token,
+  friendId,
+  deviceId,
+  friendName,
+  cropId,
+  channel = "copyLink",
+}) => {
+  const cookies = [`SPC_EC=${token}`];
+
+  return axios
+    .post(
+      `${baseUrl}/farm/api/friend/help`,
+      { friendId, cropId, deviceId, friendName, channel },
+      {
+        headers: { Cookie: cookies.join(";") },
+      }
+    )
+    .then((res) => res.data)
+    .catch((err) => err.response.data);
+};
+
+const stealWater = ({ token, friendId, friendName, deviceId }) => {
+  const cookies = [`SPC_EC=${token}`];
+
+  return axios
+    .post(
+      `${baseUrl}/farm/api/friend/steal_water`,
+      {
+        friendId,
+        friendName,
+        deviceId,
+      },
+      {
+        headers: { Cookie: cookies.join(";") },
+      }
+    )
+    .then((res) => res.data)
+    .catch((err) => err.response.data);
+};
+
+const canSteal = ({ friendId, token }) => {
+  const cookies = [`SPC_EC=${token}`];
+  const query = `friendId=${friendId}`;
+
+  return axios
+    .get(`${baseUrl}/farm/api/friend/collection_countdown?${query}`, {
+      headers: { Cookie: cookies.join(";") },
+    })
+    .then((res) => res.data)
+    .catch((err) => err.response.data);
+};
+
+const canHelp = ({ token }) => {
+  const cookies = [`SPC_EC=${token}`];
+};
+
+const getFriend = ({ friendId, token }) => {
+  const query = `friendId=${friendId}`;
+  const cookies = [`SPC_EC=${token}`];
+
+  return axios
+    .get(`${baseUrl}/farm/api/friend/orchard/context/get?${query}`, {
+      headers: { Cookie: cookies.join(";") },
+    })
+    .then((res) => res.data)
+    .catch((err) => err.response.data);
+};
+
 module.exports = {
   waterCrop,
   getCrop,
@@ -88,6 +157,11 @@ module.exports = {
   getMyCrop,
   harvestCrop,
   getMyResource,
+  helpFriend,
+  stealWater,
+  canSteal,
+  canHelp,
+  getFriend,
 };
 
 /**
