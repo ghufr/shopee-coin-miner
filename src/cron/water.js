@@ -1,6 +1,7 @@
 require("dotenv").config();
 
 const tanam = require("../packages/tanam");
+const logger = require("../utils/logger");
 
 const token = process.env.SHOPEE_TOKEN;
 const deviceId = process.env.SHOPEE_DEVICE_ID;
@@ -55,9 +56,11 @@ const display = ({ state, exp, name, totExp }) => {
           cropId: currCrop.id,
         });
         if (harvest.code === 0) {
-          console.log(
-            `+ Anda mendapatkan ${harvest.data.reward.rewardItems[0].itemExtraData.luckyDrawAwardValue} koin`
-          );
+          const reward =
+            harvest.data.reward.rewardItems[0].itemExtraData
+              .luckyDrawAwardValue;
+          logger.log({ level: "info", message: `+ ${reward} koin` });
+          console.log(`+ Anda mendapatkan ${reward} koin`);
         }
       }
 
@@ -122,19 +125,23 @@ const display = ({ state, exp, name, totExp }) => {
           cropId: friendCrop.id,
         });
         console.log(helpTo);
-      }
-
-      const canSteal = await tanam.canSteal({ token, friendId: friend.userId });
-
-      if (canSteal.data.canStealWater > 0) {
-        const steal = await tanam.stealWater({
+        const canSteal = await tanam.canSteal({
           token,
-          friendId: friend.userId,
-          friendName: friend.name,
-          deviceId,
+          friendId,
         });
-        if (steal.code === 0 && steal.data.stealWaterNumber > 0) {
-          console.log(`+ Anda mendapatkan ${steal.data.stealWaterNumber} koin`);
+
+        if (canSteal.data.canStealWater > 0) {
+          const steal = await tanam.stealWater({
+            token,
+            friendId,
+            friendName: friend.name,
+            deviceId,
+          });
+          if (steal.code === 0 && steal.data.stealWaterNumber > 0) {
+            console.log(
+              `+ Anda mendapatkan ${steal.data.stealWaterNumber} koin`
+            );
+          }
         }
       }
 
