@@ -19,6 +19,12 @@ const FROMHELP = [
     token: process.env.SHOPEE_TOKEN_FRIEND_1,
     deviceId,
   },
+  {
+    name: "notghufr",
+    userId: 306292013,
+    token: process.env.SHOPEE_TOKEN_FRIEND_2,
+    deviceId,
+  },
 ];
 
 const TOHELP = [47449961, 104047426];
@@ -41,7 +47,7 @@ const display = ({ state, exp, name, totExp }) => {
   try {
     const myCrop = await tanam.getMyCrop({ token });
 
-    // TODO: Add mechanism for refresh token
+    // TODO: CHECK LOGIN STATUS
 
     if (myCrop.code === 0) {
       const currResource = myCrop.data.resources[0];
@@ -100,10 +106,10 @@ const display = ({ state, exp, name, totExp }) => {
           token: friend.token,
           deviceId: friend.deviceId,
           friendId: PROFILE.userId,
-          cropId: currCrop.cropId,
+          cropId: currCrop.id,
         });
         if (helpFrom.code === 0) {
-          console.log(help);
+          console.log(`Mendapatkan bantuan dari ${friend.name}`);
         }
       }
 
@@ -113,7 +119,7 @@ const display = ({ state, exp, name, totExp }) => {
         const friendId = TOHELP[i];
 
         const friend = await tanam.getFriend({ friendId, token });
-        if (!friend.code !== 0) {
+        if (friend.code !== 0) {
           continue;
         }
         const friendCrop = friend.data.crops[0];
@@ -124,7 +130,9 @@ const display = ({ state, exp, name, totExp }) => {
           friendId,
           cropId: friendCrop.id,
         });
-        console.log(helpTo);
+        if (helpTo.code === 0) {
+          console.log(`help ${friend.data.user.name}`);
+        }
         const canSteal = await tanam.canSteal({
           token,
           friendId,
@@ -139,7 +147,7 @@ const display = ({ state, exp, name, totExp }) => {
           });
           if (steal.code === 0 && steal.data.stealWaterNumber > 0) {
             console.log(
-              `+ Anda mendapatkan ${steal.data.stealWaterNumber} koin`
+              `+ Anda mendapatkan ${steal.data.stealWaterNumber} koin dari ${friend.data.user.name}`
             );
           }
         }
