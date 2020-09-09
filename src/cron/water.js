@@ -25,6 +25,12 @@ const FROMHELP = [
     token: process.env.SHOPEE_TOKEN_FRIEND_2,
     deviceId,
   },
+  {
+    name: "sisfo4203",
+    userId: 307634152,
+    token: process.env.SHOPEE_TOKEN_FRIEND_3,
+    deviceId,
+  },
 ];
 
 const TOHELP = [47449961, 104047426];
@@ -108,8 +114,9 @@ const display = ({ state, exp, name, totExp }) => {
           friendId: PROFILE.userId,
           cropId: currCrop.id,
         });
+
         if (helpFrom.code === 0) {
-          console.log(`Mendapatkan bantuan dari ${friend.name}`);
+          console.log(`+ Mendapatkan bantuan dari ${friend.name}`);
         }
       }
 
@@ -147,7 +154,7 @@ const display = ({ state, exp, name, totExp }) => {
           });
           if (steal.code === 0 && steal.data.stealWaterNumber > 0) {
             console.log(
-              `+ Anda mendapatkan ${steal.data.stealWaterNumber} koin dari ${friend.data.user.name}`
+              `+ Anda mendapatkan ${steal.data.stealWaterNumber} air dari ${friend.data.user.name}`
             );
           }
         }
