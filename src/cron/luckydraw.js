@@ -2,6 +2,7 @@ require("dotenv").config();
 
 const luckydraw = require("../packages/luckydraw");
 const account = require("../packages/account");
+const logger = require("../utils/logger");
 
 const shopeeToken = process.env.SHOPEE_TOKEN_COOKIE;
 
@@ -20,6 +21,10 @@ const shopeeToken = process.env.SHOPEE_TOKEN_COOKIE;
         id: "ff7d6916be64b8b4",
       });
       if (prize.award.award_value_float > 1) {
+        logger.log({
+          level: "info",
+          message: `+ ${prize.award.award_value_float} koin`,
+        });
         console.log(`+ Anda mendapatkan ${prize.award.award_value_float} koin`);
       }
     }
