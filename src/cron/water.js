@@ -26,9 +26,15 @@ const FROMHELP = [
     deviceId,
   },
   {
+    name: "gtronicsid",
+    userId: 147605588,
+    token: process.env.SHOPEE_TOKEN_FRIEND_3,
+    deviceId,
+  },
+  {
     name: "sisfo4203",
     userId: 307634152,
-    token: process.env.SHOPEE_TOKEN_FRIEND_3,
+    token: process.env.SHOPEE_TOKEN_FRIEND_4,
     deviceId,
   },
 ];
