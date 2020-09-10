@@ -3,43 +3,15 @@ require("dotenv").config();
 const tanam = require("../packages/tanam");
 const logger = require("../utils/logger");
 
-const token = process.env.SHOPEE_TOKEN;
-const deviceId = process.env.SHOPEE_DEVICE_ID;
+const fs = require("fs");
+const { add } = require("winston");
+
 const STATES = ["Bibit", "Pohon", "Berbuah"];
 
-const PROFILE = {
-  name: "ghufr",
-  userId: 95544610,
-};
-
-const FROMHELP = [
-  {
-    name: "ghufronfr",
-    userId: 104047426,
-    token: process.env.SHOPEE_TOKEN_FRIEND_1,
-    deviceId,
-  },
-  {
-    name: "notghufr",
-    userId: 306292013,
-    token: process.env.SHOPEE_TOKEN_FRIEND_2,
-    deviceId,
-  },
-  {
-    name: "gtronicsid",
-    userId: 147605588,
-    token: process.env.SHOPEE_TOKEN_FRIEND_3,
-    deviceId,
-  },
-  {
-    name: "sisfo4203",
-    userId: 307634152,
-    token: process.env.SHOPEE_TOKEN_FRIEND_4,
-    deviceId,
-  },
+const addFriends = [
+  { name: "sucinuriyah", userId: 47449961 },
+  { name: "zenkeyko", userId: 171082687 },
 ];
-
-const TOHELP = [47449961, 104047426];
 
 const display = ({ state, exp, name, totExp }) => {
   let st = "Panen";
@@ -57,125 +29,139 @@ const display = ({ state, exp, name, totExp }) => {
 
 (async () => {
   try {
-    const myCrop = await tanam.getMyCrop({ token });
+    const raw = fs.readFileSync("./credentials.json");
+    const credentials = JSON.parse(raw);
 
-    // TODO: CHECK LOGIN STATUS
+    for (let i = 0; i < credentials.length; i++) {
+      const { token, deviceId, name } = credentials[i];
+      const friends = [...credentials, ...addFriends];
+      friends.splice(i, 1);
 
-    if (myCrop.code === 0) {
-      const currResource = myCrop.data.resources[0];
-      const currCrop = myCrop.data.crops[0];
+      // console.log(name);
 
-      // Check crop state
-      if (currCrop.state === 100) {
-        // Harvest crop
-        const harvest = tanam.harvestCrop({
-          token,
-          deviceId,
-          cropId: currCrop.id,
-        });
-        if (harvest.code === 0) {
-          const reward =
-            harvest.data.reward.rewardItems[0].itemExtraData
-              .luckyDrawAwardValue;
-          logger.log({ level: "info", message: `+ ${reward} koin` });
-          console.log(`+ Anda mendapatkan ${reward} koin`);
-        }
-      }
+      const myCrop = await tanam.getMyCrop({ token });
 
-      if (currCrop.state === 101) {
-        // Get all available crop
-        const crops = await tanam.getCrop({ token });
-        const nCrop = crops.data.cropMetas[0];
+      // TODO: CHECK LOGIN STATUS
 
-        // Tanam crop
-        const plant = await tanam.createCrop({ id: nCrop.id, token });
+      if (myCrop.code === 0) {
+        const currResource = myCrop.data.resources[0];
+        const currCrop = myCrop.data.crops[0];
 
-        if (plant.code === 0) {
-          console.log(`+ Anda menanam ${nCrop.name}`);
-        }
-      }
-
-      if (currResource.number > 0) {
-        // Water crop
-        const water = await tanam.waterCrop({
-          token,
-          cropId: currCrop.id,
-          resourceId: currResource.id,
-        });
-
-        if (water.code === 0) {
-          console.log(`+ Anda menyiram ${water.data.useNumber} air`);
-        }
-      }
-
-      // const friend = FROMHELP[0];
-
-      for (let i = 0; i < FROMHELP.length; i++) {
-        const friend = FROMHELP[i];
-
-        // get help from friend
-        const helpFrom = await tanam.helpFriend({
-          token: friend.token,
-          deviceId: friend.deviceId,
-          friendId: PROFILE.userId,
-          cropId: currCrop.id,
-        });
-
-        if (helpFrom.code === 0) {
-          console.log(`+ Mendapatkan bantuan dari ${friend.name}`);
-        }
-      }
-
-      // Help other friend
-
-      for (let i = 0; i < TOHELP.length; i++) {
-        const friendId = TOHELP[i];
-
-        const friend = await tanam.getFriend({ friendId, token });
-        if (friend.code !== 0) {
-          continue;
-        }
-        const friendCrop = friend.data.crops[0];
-
-        const helpTo = await tanam.helpFriend({
-          token,
-          deviceId,
-          friendId,
-          cropId: friendCrop.id,
-        });
-        if (helpTo.code === 0) {
-          console.log(`help ${friend.data.user.name}`);
-        }
-        const canSteal = await tanam.canSteal({
-          token,
-          friendId,
-        });
-
-        if (canSteal.data.canStealWater > 0) {
-          const steal = await tanam.stealWater({
+        // Check crop state
+        if (currCrop.state === 100) {
+          // Harvest crop
+          const harvest = tanam.harvestCrop({
             token,
-            friendId,
-            friendName: friend.name,
             deviceId,
+            cropId: currCrop.id,
           });
-          if (steal.code === 0 && steal.data.stealWaterNumber > 0) {
-            console.log(
-              `+ Anda mendapatkan ${steal.data.stealWaterNumber} air dari ${friend.data.user.name}`
-            );
+          if (harvest.code === 0) {
+            const reward =
+              harvest.data.reward.rewardItems[0].itemExtraData
+                .luckyDrawAwardValue;
+            logger.log({ level: "info", message: `+ ${reward} koin` });
+            console.log(`+ Anda mendapatkan ${reward} koin`);
           }
         }
-      }
 
-      const myNewCrop = await tanam.getMyCrop({ token });
-      if (myNewCrop.code === 0) {
-        const currCrop = myNewCrop.data.crops[0];
+        if (currCrop.state === 101) {
+          // Get all available crop
+          const crops = await tanam.getCrop({ token });
+          const nCrop = crops.data.cropMetas[0];
 
-        display({
-          state: currCrop.state,
-          exp: currCrop.exp,
-          name: currCrop.meta.name,
-          totExp: currCrop.meta.config.totalExp,
-        });
+          // Tanam crop
+          const plant = await tanam.createCrop({ id: nCrop.id, token });
+
+          if (plant.code === 0) {
+            console.log(`+ Anda menanam ${nCrop.name}`);
+          }
+        }
+
+        if (currResource.number > 0) {
+          // Water crop
+          const water = await tanam.waterCrop({
+            token,
+            cropId: currCrop.id,
+            resourceId: currResource.id,
+          });
+
+          if (water.code === 0) {
+            console.log(`+ Anda menyiram ${water.data.useNumber} air`);
+          }
+        }
+
+        // const friend = FROMHELP[0];
+
+        // for (let j = 0; j < friends.length; i++) {
+        //   const friend = friends[j];
+
+        //   // get help from friend
+        //   const helpFrom = await tanam.helpFriend({
+        //     token: cred.token,
+        //     deviceId: cred.deviceId,
+        //     friendId: friend.userId,
+        //     cropId: currCrop.id,
+        //   });
+
+        //   if (helpFrom.code === 0) {
+        //     console.log(`+ Mendapatkan bantuan dari ${friend.name}`);
+        //   }
+        // }
+
+        // Help other friend
+
+        for (let j = 0; j < friends.length; j++) {
+          const friend = friends[j];
+
+          const friendProfile = await tanam.getFriend({
+            friendId: friend.userId,
+            token,
+          });
+          if (friendProfile.code !== 0) {
+            continue;
+          }
+          const friendCrop = friendProfile.data.crops[0];
+
+          const helpTo = await tanam.helpFriend({
+            token,
+            deviceId,
+            friendId: friend.userId,
+            cropId: friendCrop.id,
+          });
+          if (helpTo.code === 0) {
+            console.log(`help ${friendProfile.data.user.name}`);
+          }
+          const canSteal = await tanam.canSteal({
+            token,
+            friendId: friend.userId,
+          });
+
+          if (canSteal.data.canStealWater > 0) {
+            const steal = await tanam.stealWater({
+              token,
+              friendId: friend.userId,
+              friendName: friend.name,
+              deviceId,
+            });
+            if (steal.code === 0 && steal.data.stealWaterNumber > 0) {
+              console.log(
+                `+ Anda mendapatkan ${steal.data.stealWaterNumber} air dari ${friendProfile.data.user.name}`
+              );
+            }
+          }
+        }
+
+        const myNewCrop = await tanam.getMyCrop({ token });
+        if (myNewCrop.code === 0) {
+          const currCrop = myNewCrop.data.crops[0];
+
+          display({
+            state: currCrop.state,
+            exp: currCrop.exp,
+            name: currCrop.meta.name,
+            totExp: currCrop.meta.config.totalExp,
+          });
+        }
       }
     }
   } catch (err) {
