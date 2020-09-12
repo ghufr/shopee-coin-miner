@@ -9,8 +9,15 @@ const STATES = ["Bibit", "Pohon", "Berbuah"];
 
 const addFriends = [
   { name: "sucinuriyah", userId: 47449961, help: true },
+  { name: "siscadewijs23", userId: 150344844, help: true },
+
+  { name: "ifanfatkhurochman", userId: 5838156, help: false },
+  { name: "galihputrawijaya", userId: 104047426, help: false },
+  { name: "nurafida12345", userId: 215721804, help: false },
   { name: "zenkeyko", userId: 171082687, help: false },
+  { name: "emilparts", userId: 14264625, help: false },
   { name: "winspack99", userId: 285404831, help: false },
+  { name: "mhmmdanggy", userId: 209098546, help: false },
 ];
 
 const display = ({ state, exp, name, totExp }) => {
