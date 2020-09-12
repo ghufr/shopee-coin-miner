@@ -11,6 +11,8 @@ const addFriends = [
   { name: "sucinuriyah", userId: 47449961, help: true },
   { name: "siscadewijs23", userId: 150344844, help: true },
 
+  { name: "emilparts", userId: 14264625, help: false },
+  { name: "rizkyrhakiki", userId: 6950172, help: false },
   { name: "ifanfatkhurochman", userId: 5838156, help: false },
   { name: "galihputrawijaya", userId: 104047426, help: false },
   { name: "nurafida12345", userId: 215721804, help: false },
