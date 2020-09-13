@@ -10,6 +10,7 @@ const STATES = ["Bibit", "Pohon", "Berbuah"];
 const addFriends = [
   { name: "sucinuriyah", userId: 47449961, help: true },
   { name: "siscadewijs23", userId: 150344844, help: true },
+  { name: "ryansupriadi17", userId: 121967668, help: true },
 
   { name: "emilparts", userId: 14264625, help: false },
   { name: "rizkyrhakiki", userId: 6950172, help: false },
