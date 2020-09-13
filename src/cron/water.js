@@ -11,12 +11,17 @@ const addFriends = [
   { name: "ryansupriadi17", userId: 121967668, help: true },
 
   { name: "emilparts", userId: 14264625, help: false },
+  { name: "ezrachrismyralda", userId: 34862991, help: false },
+  { name: "handayanioktavia", userId: 35811381, help: false },
+  { name: "inez.sg", userId: 54071695, help: false },
+  { name: "kiranadhiatama", userId: 3106582, help: false },
+  { name: "nabilazaira", userId: 59229412, help: false },
+  { name: "sabilaa.ch", userId: 30275678, help: false },
   { name: "rizkyrhakiki", userId: 6950172, help: false },
   { name: "ifanfatkhurochman", userId: 5838156, help: false },
   { name: "galihputrawijaya", userId: 104047426, help: false },
   { name: "nurafida12345", userId: 215721804, help: false },
   { name: "zenkeyko", userId: 171082687, help: false },
-  { name: "emilparts", userId: 14264625, help: false },
   { name: "winspack99", userId: 285404831, help: false },
   { name: "mhmmdanggy", userId: 209098546, help: false },
 ];
