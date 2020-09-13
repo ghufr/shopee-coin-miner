@@ -30,12 +30,7 @@ const fs = require("fs");
       // console.log(checkin);
 
       if (checkin.code === 0 && checkin.data.success) {
-        logger.log({
-          level: "info",
-          message: `${name} mendapatkan ${checkin.data.increase_coins} koin`,
-          label: "checkin",
-        });
-        console.log(
+        logger.info(
           `+ ${name} mendapatkan ${checkin.data.increase_coins} koin`
         );
       }

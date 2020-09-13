@@ -26,12 +26,9 @@ const fs = require("fs");
           id: "ff7d6916be64b8b4",
         });
         if (prize.award.award_value_float > 1) {
-          const message = `${name} mendapatkan ${prize.award.award_value_float} koin`;
-          logger.log({
-            level: "info",
-            message,
-          });
-          console.log(`+ ${message}`);
+          logger.info(
+            `+ ${name} mendapatkan ${prize.award.award_value_float} koin`
+          );
         }
       }
     }

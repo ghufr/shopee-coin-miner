@@ -69,8 +69,7 @@ const display = ({ state, exp, name, totExp }) => {
             const reward =
               harvest.data.reward.rewardItems[0].itemExtraData
                 .luckyDrawAwardValue;
-            logger.log({ level: "info", message: `+ ${reward} koin` });
-            console.log(`+ ${name} mendapatkan ${reward} koin`);
+            logger.info(`+ ${reward} koin`);
           }
         }
 
@@ -83,7 +82,7 @@ const display = ({ state, exp, name, totExp }) => {
           const plant = await tanam.createCrop({ id: nCrop.id, token });
 
           if (plant.code === 0) {
-            console.log(`+ ${name} menanam ${nCrop.name}`);
+            logger.log(`+ ${name} menanam ${nCrop.name}`);
           }
         }
 
@@ -96,7 +95,7 @@ const display = ({ state, exp, name, totExp }) => {
           });
 
           if (water.code === 0) {
-            console.log(`+ ${name} menyiram ${water.data.useNumber} air`);
+            logger.log(`+ ${name} menyiram ${water.data.useNumber} air`);
           }
         }
 
@@ -140,7 +139,7 @@ const display = ({ state, exp, name, totExp }) => {
               cropId: friendCrop.id,
             });
             if (helpTo.code === 0) {
-              console.log(`${name} membantu ${friendProfile.data.user.name}`);
+              logger.info(`${name} membantu ${friendProfile.data.user.name}`);
             }
           }
 
@@ -157,7 +156,7 @@ const display = ({ state, exp, name, totExp }) => {
               deviceId,
             });
             if (steal.code === 0 && steal.data.stealWaterNumber > 0) {
-              console.log(
+              logger.info(
                 `+ ${name} mendapatkan ${steal.data.stealWaterNumber} air dari ${friendProfile.data.user.name}`
               );
             }
