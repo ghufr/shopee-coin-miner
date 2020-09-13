@@ -1,5 +1,3 @@
-require("dotenv").config();
-
 const tanam = require("../packages/tanam");
 const logger = require("../utils/logger");
 

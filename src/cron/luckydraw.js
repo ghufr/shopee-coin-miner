@@ -1,5 +1,3 @@
-require("dotenv").config();
-
 const luckydraw = require("../packages/luckydraw");
 const account = require("../packages/account");
 const logger = require("../utils/logger");

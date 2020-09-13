@@ -1,5 +1,3 @@
-require("dotenv").config();
-
 const coins = require("../packages/coins");
 const account = require("../packages/account");
 const logger = require("../utils/logger");
