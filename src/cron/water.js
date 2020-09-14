@@ -63,7 +63,7 @@ const display = ({ state, exp, name, totExp }) => {
         // Check crop state
         if (currCrop.state === 100) {
           // Harvest crop
-          const harvest = tanam.harvestCrop({
+          const harvest = await tanam.harvestCrop({
             token,
             deviceId,
             cropId: currCrop.id,
@@ -74,9 +74,6 @@ const display = ({ state, exp, name, totExp }) => {
                 .luckyDrawAwardValue;
             logger.info(`+ ${reward} koin`);
           }
-        }
-
-        if (currCrop.state === 101) {
           // Get all available crop
           const crops = await tanam.getCrop({ token });
           const nCrop = crops.data.cropMetas[0];
