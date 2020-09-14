@@ -85,7 +85,7 @@ const display = ({ state, exp, name, totExp }) => {
           const plant = await tanam.createCrop({ id: nCrop.id, token });
 
           if (plant.code === 0) {
-            logger.log(`+ ${name} menanam ${nCrop.name}`);
+            logger.info(`+ ${name} menanam ${nCrop.name}`);
           }
         }
 
@@ -98,7 +98,7 @@ const display = ({ state, exp, name, totExp }) => {
           });
 
           if (water.code === 0) {
-            logger.log(`+ ${name} menyiram ${water.data.useNumber} air`);
+            logger.info(`+ ${name} menyiram ${water.data.useNumber} air`);
           }
         }
 
