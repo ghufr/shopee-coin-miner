@@ -9,9 +9,9 @@ const addFriends = [
   { name: "sucinuriyah", userId: 47449961, help: true },
   { name: "siscadewijs23", userId: 150344844, help: true },
   { name: "ryansupriadi17", userId: 121967668, help: true },
+  { name: "ezrachrismyralda", userId: 34862991, help: true },
 
   { name: "emilparts", userId: 14264625, help: false },
-  { name: "ezrachrismyralda", userId: 34862991, help: false },
   { name: "handayanioktavia", userId: 35811381, help: false },
   { name: "inez.sg", userId: 54071695, help: false },
   { name: "kiranadhiatama", userId: 3106582, help: false },
