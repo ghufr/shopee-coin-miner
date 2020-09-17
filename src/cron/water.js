@@ -55,36 +55,9 @@ const display = ({ state, exp, name, totExp }) => {
       const myCrop = await tanam.getMyCrop({ token });
 
       // TODO: CHECK LOGIN STATUS
-
       if (myCrop.code === 0) {
         const currResource = myCrop.data.resources[0];
         const currCrop = myCrop.data.crops[0];
-
-        // Check crop state
-        if (currCrop.state === 100) {
-          // Harvest crop
-          const harvest = await tanam.harvestCrop({
-            token,
-            deviceId,
-            cropId: currCrop.id,
-          });
-          if (harvest.code === 0) {
-            const reward =
-              harvest.data.reward.rewardItems[0].itemExtraData
-                .luckyDrawAwardValue;
-            logger.info(`${reward} koin`);
-          }
-          // Get all available crop
-          const crops = await tanam.getCrop({ token });
-          const nCrop = crops.data.cropMetas[0];
-
-          // Tanam crop
-          const plant = await tanam.createCrop({ id: nCrop.id, token });
-
-          if (plant.code === 0) {
-            logger.info(`${name} menanam ${nCrop.name}`);
-          }
-        }
 
         if (currResource.number > 0) {
           // Water crop
@@ -167,6 +140,32 @@ const display = ({ state, exp, name, totExp }) => {
         const myNewCrop = await tanam.getMyCrop({ token });
         if (myNewCrop.code === 0) {
           const currCrop = myNewCrop.data.crops[0];
+
+          // Check crop state
+          if (currCrop.state === 100) {
+            // Harvest crop
+            const harvest = await tanam.harvestCrop({
+              token,
+              deviceId,
+              cropId: currCrop.id,
+            });
+            if (harvest.code === 0) {
+              const reward =
+                harvest.data.reward.rewardItems[0].itemExtraData
+                  .luckyDrawAwardValue;
+              logger.info(`${reward} koin`);
+            }
+            // Get all available crop
+            const crops = await tanam.getCrop({ token });
+            const nCrop = crops.data.cropMetas[0];
+
+            // Tanam crop
+            const plant = await tanam.createCrop({ id: nCrop.id, token });
+
+            if (plant.code === 0) {
+              logger.info(`${name} menanam ${nCrop.name}`);
+            }
+          }
 
           display({
             state: currCrop.state,
