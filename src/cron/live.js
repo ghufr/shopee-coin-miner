@@ -17,7 +17,7 @@ const sleep = (ms) => {
     const credentials = JSON.parse(raw);
 
     for (let i = 0; i < credentials.length; i++) {
-      const { token, deviceId } = credentials[i];
+      const { token, deviceId, name } = credentials[i];
 
       const Ua = process.env.UA;
       const dt = new Date();
