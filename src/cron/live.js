@@ -1,79 +1,103 @@
 require("dotenv").config();
+const fs = require("fs");
+const FormData = require("form-data");
 
 const live = require("../packages/live");
+const logger = require("../utils/logger");
 
-const token = process.env.SHOPEE_TOKEN;
-const deviceId = process.env.SHOPEE_DEVICE_ID;
+const sleep = (ms) => {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+};
 
 (async () => {
   try {
-    const dt = new Date();
-    const ts = dt.getTime();
+    const raw = fs.readFileSync("credentials.json");
+    const credentials = JSON.parse(raw);
 
-    const options = {
-      offset: 0,
-      limit: 10,
-      tab_type: 1,
-      tab_id: 592037541125632,
-      device_id: deviceId,
-      ctx_id: `${deviceId}-${ts}-79`,
-      token,
-    };
+    for (let i = 0; i < credentials.length; i++) {
+      const { token, deviceId } = credentials[i];
 
-    // const claim = await live.canClaim({ uid: 2981804, token });
+      const Ua = process.env.UA;
+      const dt = new Date();
+      const ts = dt.getTime();
 
-    // const claim = await live.claimCoin({ uid: 2981804, token });
-    // console.log(claim);
-    const streams = await live.getLivestreams(options);
-    if (streams.err_code === 0 && streams.data.list.length > 0) {
-      let max = 0;
-      let stream = null;
+      const options = {
+        offset: 0,
+        limit: 10,
+        tab_type: 1,
+        tab_id: 592037541125632,
+        device_id: deviceId,
+        ctx_id: `${deviceId}-${ts}-79`,
+        token,
+      };
 
-      const paidStreams = streams.data.list.filter((str) => {
-        const bonus = str.item.coins_per_claim;
-        if (bonus > 0) {
-          if (bonus > max) {
-            max = bonus;
-            stream = str;
+      const streams = await live.getLivestreams(options);
+      if (streams.err_code === 0 && streams.data.list.length > 0) {
+        const paidStreams = streams.data.list.filter(
+          (str) => str.item.coins_per_claim > 0
+        );
+        const stream = paidStreams[0];
+
+        if (stream) {
+          const claimStatus = await live.claimStatus({
+            uid: stream.item.uid,
+            token,
+            sessId: stream.item_id,
+          });
+
+          const joinStream = await live.joinStream({
+            sessId: stream.item_id,
+            token,
+            deviceId,
+          });
+
+          if (claimStatus.data.claim_times_left > 0) {
+            await live.lockCoin({
+              sessId: stream.item_id,
+              uid: stream.item.uid,
+              Ua,
+              token,
+            });
+            const formData = new FormData();
+            formData.append(
+              "PLAY_EVT_PLAY_BEGIN",
+              joinStream.data.session.play_url
+            );
+            formData.append(
+              "JDfbN4Q7aHETNLOEnYJ6/nLFUu8v84hAEkD/pS3or5E",
+              "* xiaomiRedmi Note 50:29B 26008J P Z IDb j 1.1.9p"
+            );
+            for (
+              let j = 0;
+              j < claimStatus.data.required_watch_time / 10;
+              j++
+            ) {
+              await live.reportPB({
+                token,
+                data: formData,
+              });
+              await sleep(1000 * 10);
+            }
+
+            const cclaim = await live.canClaim({
+              token,
+              sessId: stream.item_id,
+            });
+            if (cclaim.err_code === 0) {
+              const claim = await live.claimCoin({
+                token,
+                uid: stream.item.uid,
+                sessId: stream.item_id,
+              });
+              if (claim.err_code === 0) {
+                logger.info(
+                  `${name} mendapakan ${claimStatus.data.coins_per_claim} koin`
+                );
+              }
+            }
           }
-          return true;
-        }
-      });
-      console.log(`Terdapat ${paidStreams.length} stream yang memberikan koin`);
-      if (stream) {
-        const hostId = stream.item.uid;
-        const sessId = stream.item_id;
-        const roomId = stream.item.room_id;
-        const shopId = stream.item.shop_id;
-
-        // const follow = await live.followStream({ sessId, token });
-        // if (follow.err_code !== 0) {
-        //   throw Error(follow.err_msg);
-        // }
-
-        const join = await live.joinStream({ sessId, token, deviceId });
-
-        if (join.err_code !== 0) {
-          throw Error(join.err_msg);
-        }
-        const chatroomId = join.data.session.chatroom_id;
-        const usersig = join.data.usersig;
-
-        // const chatroom = await live.getChatroom({ token });
-        // const reportPB = await live.reportPB();
-        // console.log(reportPB);
-        // TODO: Connect using webscoket
-        const claimStatus = await live.claimStatus({ token, sessId });
-        // if (
-        //   claimStatus.err_code !== 0 ||
-        //   claimStatus.data.can_claim === 0 ||
-        //   claim_times_left === 0
-        // ) {
-        //   throw Error("Tidak bisa mengklaim koin");
-        // }
-        const claimCoin = await live.claimCoin({ uid: hostId, sessId, token });
-        if (claimCoin.err_code !== 0) {
-          throw Error(claimCoin.err_msg);
         }
       }
     }
