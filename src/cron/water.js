@@ -11,19 +11,19 @@ const addFriends = [
   { name: "ryansupriadi17", userId: 121967668, help: true },
   { name: "ezrachrismyralda", userId: 34862991, help: true },
 
-  { name: "emilparts", userId: 14264625, help: false },
-  { name: "handayanioktavia", userId: 35811381, help: false },
-  { name: "inez.sg", userId: 54071695, help: false },
-  { name: "kiranadhiatama", userId: 3106582, help: false },
-  { name: "nabilazaira", userId: 59229412, help: false },
-  { name: "sabilaa.ch", userId: 30275678, help: false },
-  { name: "rizkyrhakiki", userId: 6950172, help: false },
-  { name: "ifanfatkhurochman", userId: 5838156, help: false },
-  { name: "galihputrawijaya", userId: 104047426, help: false },
-  { name: "nurafida12345", userId: 215721804, help: false },
-  { name: "zenkeyko", userId: 171082687, help: false },
-  { name: "winspack99", userId: 285404831, help: false },
-  { name: "mhmmdanggy", userId: 209098546, help: false },
+  // { name: "emilparts", userId: 14264625, help: false },
+  // { name: "handayanioktavia", userId: 35811381, help: false },
+  // { name: "inez.sg", userId: 54071695, help: false },
+  // { name: "kiranadhiatama", userId: 3106582, help: false },
+  // { name: "nabilazaira", userId: 59229412, help: false },
+  // { name: "sabilaa.ch", userId: 30275678, help: false },
+  // { name: "rizkyrhakiki", userId: 6950172, help: false },
+  // { name: "ifanfatkhurochman", userId: 5838156, help: false },
+  // { name: "galihputrawijaya", userId: 104047426, help: false },
+  // { name: "nurafida12345", userId: 215721804, help: false },
+  // { name: "zenkeyko", userId: 171082687, help: false },
+  // { name: "winspack99", userId: 285404831, help: false },
+  // { name: "mhmmdanggy", userId: 209098546, help: false },
 ];
 
 const display = ({ state, exp, name, totExp }) => {
@@ -72,29 +72,10 @@ const display = ({ state, exp, name, totExp }) => {
           }
         }
 
-        // const friend = FROMHELP[0];
-
-        // for (let j = 0; j < friends.length; i++) {
-        //   const friend = friends[j];
-
-        //   // get help from friend
-        //   const helpFrom = await tanam.helpFriend({
-        //     token: cred.token,
-        //     deviceId: cred.deviceId,
-        //     friendId: friend.userId,
-        //     cropId: currCrop.id,
-        //   });
-
-        //   if (helpFrom.code === 0) {
-        //     console.log(`+ Mendapatkan bantuan dari ${friend.name}`);
-        //   }
-        // }
-
         // Help other friend
 
         for (let j = 0; j < friends.length; j++) {
           const friend = friends[j];
-          // console.log(friend.name);
 
           const friendProfile = await tanam.getFriend({
             friendId: friend.userId,
@@ -116,7 +97,7 @@ const display = ({ state, exp, name, totExp }) => {
               logger.info(`${name} membantu ${friendProfile.data.user.name}`);
             }
           }
-
+          // Now you can't steal from friend :(
           //   const canSteal = await tanam.canSteal({
           //     token,
           //     friendId: friend.userId,
@@ -153,7 +134,7 @@ const display = ({ state, exp, name, totExp }) => {
               const reward =
                 harvest.data.reward.rewardItems[0].itemExtraData
                   .luckyDrawAwardValue;
-              logger.info(`${reward} koin`);
+              logger.info(`${name} mendapatkan ${reward} koin`);
             }
             // Get all available crop
             const crops = await tanam.getCrop({ token });

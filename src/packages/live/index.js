@@ -1,6 +1,5 @@
 const axios = require("axios");
 const qs = require("querystring");
-const WebSocket = require("ws");
 
 const baseUrl = "https://live.shopee.co.id";
 
@@ -15,18 +14,26 @@ const getLivestreams = ({ token, ...query }) => {
     .catch((err) => err.response.data);
 };
 
-const reportPB = () => {
+const reportPB = ({ token, data }) => {
+  const cookies = [`SPC_EC=${token}`];
+
   return axios
-    .post(`${baseUrl}/dataapi/dataweb/event/reportPB`)
+    .post(`${baseUrl}/dataapi/dataweb/event/reportPB`, null, {
+      headers: {
+        Cookie: cookies.join(";"),
+        "Content-Type": "multipart/form-data",
+      },
+      body: data,
+    })
     .then((res) => res.data)
     .catch((err) => err.response.data);
 };
 
-const followStream = ({ token, sessId }) => {
+const followStream = ({ token, uid }) => {
   const cookies = [`SPC_EC=${token}`];
 
   return axios
-    .get(`${baseUrl}/api/v1/host/${sessId}/follow`, {
+    .get(`${baseUrl}/api/v1/host/${uid}/follow`, {
       headers: { Cookie: cookies.join(";") },
     })
     .then((res) => res.data)
@@ -71,19 +78,42 @@ const claimCoin = ({ token, uid, sessId }) => {
     .catch((err) => err.response.data);
 };
 
-const claimStatus = ({ token, sessId }) => {
+const claimStatus = ({ token, uid, sessId }) => {
   const cookies = [`SPC_EC=${token}`];
   return axios
-    .get(`${baseUrl}/api/v1/session/${sessId}/coin/user_config?uid=36197781`, {
+    .get(`${baseUrl}/api/v1/session/${sessId}/coin/user_config?uid=${uid}`, {
       headers: { Cookie: cookies.join(";") },
     })
     .then((res) => res.data)
     .catch((err) => err.response.data);
 };
 
-const canClaim = ({ uid, token }) => {
+const lockCoin = ({ uid, sessId, token, Ua }) => {
+  const cookies = [`SPC_EC=${token}`, `UA=${Ua}`];
+
   return axios
-    .post(`${baseUrl}/api/v1/session/${uid}/coin/can_claim`)
+    .post(
+      `${baseUrl}/api/v1/session/${sessId}/coin/lock`,
+      { uid },
+      {
+        headers: { Cookie: cookies.join(";") },
+      }
+    )
+    .then((res) => res.data)
+    .catch((err) => err.response.data);
+};
+
+const canClaim = ({ sessId, token, uid, shopeeToken }) => {
+  const cookies = [`SPC_EC=${token}`, `shopee_token=${shopeeToken}`];
+
+  return axios
+    .post(
+      `${baseUrl}/api/v1/session/${sessId}/coin/can_claim`,
+      { uid },
+      {
+        headers: { Cookie: cookies.join(";") },
+      }
+    )
     .then((res) => res.data)
     .catch((err) => err.response.data);
 };
@@ -112,22 +142,25 @@ const exitStream = ({ sessId }) => {
     .catch((err) => err.response.data);
 };
 
-const connectWs = () => {
+const connectWs = ({ sessId, uid, deviceId, userSig }) => {
   const query = {
-    uid: 95544610,
-    session_id: 2974334,
+    uid,
+    session_id: sessId,
     version: "v2",
+    device_id: deviceId,
+    usersig: userSig,
+    conn_ts: 1600141612959,
+    last_msg_ts: 0,
   };
-  const ws = new WebSocket(
-    `ws://live.shopee.co.id/im/v1/comet?${qs.stringify(query)}`
-  );
-  ws.on("open", function open() {
-    ws.send("something");
-  });
 
-  ws.on("message", function incoming(data) {
-    console.log(data);
-  });
+  return axios
+    .get(`https://live.shopee.co.id/im/v1/comet?${qs.stringify(query)}`, {
+      headers: {
+        "Sec-WebSocket-Key": "F5DdpXHTC+R9n/XFPPTuyg==",
+      },
+    })
+    .then((res) => res.data)
+    .catch((err) => err.response.data);
 };
 
 module.exports = {
@@ -141,4 +174,5 @@ module.exports = {
   canClaim,
   exitStream,
   joinStream,
+  lockCoin,
 };

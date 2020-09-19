@@ -1,3 +1,4 @@
+require("dotenv").config();
 const fs = require("fs");
 const boardgame = require("../packages/boardgame");
 const account = require("../packages/account");
@@ -8,7 +9,7 @@ const logger = require("../utils/logger");
   try {
     const raw = fs.readFileSync("credentials.json");
     const credentials = JSON.parse(raw);
-    const Ua = "Shopee Android Beeshop locale/id version=378 appver=26011";
+    const Ua = process.env.UA;
     const rollId = 10958;
     const eventId = "37e5615c7e1e02e3";
 
@@ -27,15 +28,15 @@ const logger = require("../utils/logger");
 
       if (rollStatus.data && rollStatus.data.token.remaining > 0) {
         const roll = await boardgame.roll({
-          eventId: "37e5615c7e1e02e3",
-          rollId: 10958,
+          eventId,
+          rollId,
           token,
           userId,
           deviceId,
           shopeeToken,
         });
         // console.log(roll);
-        if (roll.data.step_action === "PLUS_POINT") {
+        if (roll.data && roll.data.step_action === "PLUS_POINT") {
           logger.info(
             `${name} mendapatkan ${roll.data.step_info.point_earned} Poin`
           );

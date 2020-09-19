@@ -2,6 +2,7 @@ const axios = require("axios");
 const Cookie = require("cookie");
 
 const mallBaseUrl = "https://mall.shopee.co.id";
+const shopeeBaseUrl = "https://shopee.co.id";
 
 const refresh = ({ shopeeToken, Ua }) => {
   const cookies = [`UA=${Ua}`, `shopee_token=${shopeeToken}`];
@@ -15,4 +16,12 @@ const refresh = ({ shopeeToken, Ua }) => {
     .catch((err) => err.response.data);
 };
 
-module.exports = { refresh };
+const loginStatus = ({ Ua, shopeeToken }) => {
+  const cookies = [`UA=${Ua}`, `shopee_token=${shopeeToken}`];
+
+  return axios.get(`${shopeeBaseUrl}/api/v2/user/login_status`, {
+    headers: { cookie: cookies.join(";") },
+  });
+};
+
+module.exports = { refresh, loginStatus };

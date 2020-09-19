@@ -1,3 +1,4 @@
+require("dotenv").config();
 const luckydraw = require("../packages/luckydraw");
 const account = require("../packages/account");
 const logger = require("../utils/logger");
@@ -12,7 +13,7 @@ const fs = require("fs");
 
     for (let i = 0; i < credentials.length; i++) {
       const { shopeeToken, name } = credentials[i];
-      const Ua = "Shopee Android Beeshop locale/id version=376 appver=26008";
+      const Ua = process.env.UA;
       const token = await account.refresh({ shopeeToken, Ua });
 
       // Cek token
@@ -25,7 +26,7 @@ const fs = require("fs");
         });
         if (prize.award.award_value_float > 1) {
           logger.info(
-            `+ ${name} mendapatkan ${prize.award.award_value_float} koin`
+            `${name} mendapatkan ${prize.award.award_value_float} koin`
           );
         }
       }
