@@ -35,10 +35,15 @@ const sleep = (ms) => {
 
       const streams = await live.getLivestreams(options);
       if (streams.err_code === 0 && streams.data.list.length > 0) {
-        const paidStreams = streams.data.list.filter(
-          (str) => str.item.coins_per_claim > 0
-        );
-        const stream = paidStreams[0];
+        let max = 0;
+        const paidStreams = streams.data.list.filter((str) => {
+          const coin = str.item.coins_per_claim;
+          if (coin > max) {
+            max = coin;
+            return true;
+          }
+        });
+        const stream = paidStreams[paidStreams.length - 1];
 
         if (stream) {
           const claimStatus = await live.claimStatus({
