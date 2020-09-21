@@ -12,22 +12,40 @@ const fs = require("fs");
     const credentials = JSON.parse(raw);
 
     for (let i = 0; i < credentials.length; i++) {
-      const { shopeeToken, name } = credentials[i];
+      const { shopeeToken, name, userId } = credentials[i];
       const Ua = process.env.UA;
       const token = await account.refresh({ shopeeToken, Ua });
-
       // Cek token
-      const chances = await luckydraw.chances({ token });
-      if (chances.chance_count > 0) {
+      const activityId = "2696a9e6224532e7";
+
+      const activity = await luckydraw.getActivity({
+        activityId,
+        token,
+      });
+
+      const eventId = activity.data.basic.event_code;
+      const chanceId = activity.data.modules[0].module_id;
+      const appId = "E9VFyxwmtgjnCR8uhL";
+
+      const requestId = `${userId}52057634`;
+
+      const chances = await luckydraw.chances({
+        token,
+        eventId,
+        chanceId,
+        appId,
+      });
+      if (chances.code === 0 && chances.data.accumulate_chance > 0) {
         // Claim hadiah
-        const prize = await luckydraw.claim({
+        const claim = await luckydraw.claim({
           token,
-          id: "ff7d6916be64b8b4",
+          eventId,
+          appId,
+          activityId,
+          requestId,
         });
-        if (prize.award.award_value_float > 1) {
-          logger.info(
-            `${name} mendapatkan ${prize.award.award_value_float} koin`
-          );
+        if (claim.data.prize.prize_type === 2) {
+          logger.info(`${name} mendapatkan ${claim.data.package_name}`);
         }
       }
     }
