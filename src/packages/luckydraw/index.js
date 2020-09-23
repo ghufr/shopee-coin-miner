@@ -49,4 +49,14 @@ const getActivity = ({ activityId, token }) => {
     .catch((err) => err.response.data);
 };
 
-module.exports = { claim, chances, getActivity };
+const getDailyPrize = () => {
+  return axios
+    .get("https://shopee.co.id/Daily-Prize", { maxRedirects: 3 })
+    .then((res) => {
+      const arr = res.request.path.split("/");
+      return arr[arr.length - 1];
+    })
+    .catch((err) => err.response.data);
+};
+
+module.exports = { claim, chances, getActivity, getDailyPrize };

@@ -16,7 +16,7 @@ const fs = require("fs");
       const Ua = process.env.UA;
       const token = await account.refresh({ shopeeToken, Ua });
       // Cek token
-      const activityId = "2696a9e6224532e7";
+      const activityId = await luckydraw.getDailyPrize();
 
       const activity = await luckydraw.getActivity({
         activityId,

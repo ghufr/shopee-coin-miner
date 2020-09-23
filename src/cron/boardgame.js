@@ -35,7 +35,6 @@ const logger = require("../utils/logger");
           deviceId,
           shopeeToken,
         });
-        // console.log(roll);
         if (roll.data && roll.data.step_action === "PLUS_POINT") {
           logger.info(
             `${name} mendapatkan ${roll.data.step_info.point_earned} Poin`
