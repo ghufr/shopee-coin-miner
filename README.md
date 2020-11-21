@@ -1,13 +1,15 @@
+# Shopee Coin Chaser
+
 Simple node.js script to automate shopee coin mining.
 
-# Features
+## Features
 
-## Work In Progres
+### Work In Progres
 
 - Shopee Goyang Pohon
 - Shopee Capit
 
-## Done Feature
+### Done Feature
 
 - Shopee Tanam (self watering, harvesting, planting, help friends)
 - Shopee Checkin (auto checkin)
@@ -15,24 +17,24 @@ Simple node.js script to automate shopee coin mining.
 - ~~Shopee Poly (Boardgame)~~ (No longer exist)
 - Shopee Live
 
-## Next Feature
+### Next Feature
 
 - Shopee feed (auto comment & like)
 - Shopee review (photo, video, comment, rating)
 
-## Future
+### Future
 
 - shopee-auto-cart
 - cli?
 
-# How to use
+## How to use
 
-## Requirements
+### Requirements
 
 - node.js >= 10
 - Rooted Android phone (emulator / smartphone) (used only once)
 
-## Setup
+### Setup
 
 - Create credentials.json
   | field | type | desc |
@@ -57,11 +59,11 @@ Simple node.js script to automate shopee coin mining.
 
 - Create friends.json
 
-## Running
+### Running
 
 `node ./src/cron/`[command_name]
 
-### List of commands
+#### List of commands
 
 - water.js: plan, water, harvest, and help friend
 - luckdraw.js: get coint from playing shopee luckydraw
