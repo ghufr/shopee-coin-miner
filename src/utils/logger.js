@@ -6,7 +6,7 @@ const logger = createLogger({
   format: format.combine(format.timestamp(), format.json()),
   transports: [
     new transports.DailyRotateFile({
-      filename: "./logs/actions.log",
+      filename: "./logs/actions_%DATE%.log",
       level: "info",
       frequency: "24h",
       datePattern: "YYYY-MM-DD",
