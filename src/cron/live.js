@@ -1,9 +1,9 @@
-require("dotenv").config();
 const fs = require("fs");
 const FormData = require("form-data");
 
 const live = require("../packages/live");
 const logger = require("../utils/logger");
+const { userAgent } = require("../config");
 
 const sleep = (ms) => {
   return new Promise((resolve) => {
@@ -19,7 +19,6 @@ const sleep = (ms) => {
     for (let i = 0; i < credentials.length; i++) {
       const { token, deviceId, name } = credentials[i];
 
-      const Ua = process.env.UA;
       const dt = new Date();
       const ts = dt.getTime();
 
@@ -62,7 +61,7 @@ const sleep = (ms) => {
             await live.lockCoin({
               sessId: stream.item_id,
               uid: stream.item.uid,
-              Ua,
+              userAgent,
               token,
             });
             const formData = new FormData();

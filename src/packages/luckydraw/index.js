@@ -1,13 +1,17 @@
 const axios = require("axios");
-const gameBaseUrl = "https://games.shopee.co.id";
+const qs = require("qs");
+
+const { baseUrl } = require("../../config");
 
 // every 8AM
-const claim = ({ eventId, token, requestId, appId, activityId }) => {
+const claim = ({ eventId, token, appId, requestId, activityId }) => {
   const cookies = [`SPC_EC=${token}`];
+
+  const url = `${baseUrl.games}/luckydraw/api/v1/lucky/event/${eventId}`;
 
   return axios
     .post(
-      `${gameBaseUrl}/luckydraw/api/v1/lucky/event/${eventId}`,
+      url,
       {
         request_id: requestId,
         app_id: appId,
@@ -24,39 +28,70 @@ const claim = ({ eventId, token, requestId, appId, activityId }) => {
 const chances = ({ token, chanceId, eventId, appId }) => {
   const cookies = [`SPC_EC=${token}`];
 
+  const query = {
+    appid: appId,
+    basic: false,
+  };
+
+  const url = `${
+    baseUrl.games
+  }/gameplatform/api/v1/chance/${chanceId}/event/${eventId}/query?${qs.stringify(
+    query
+  )}`;
+
   return axios
-    .get(
-      `${gameBaseUrl}/gameplatform/api/v1/chance/${chanceId}/event/${eventId}/query?appid=${appId}`,
-      {
-        headers: { Cookie: cookies.join(";") },
-      }
-    )
+    .get(url, {
+      headers: { Cookie: cookies.join(";") },
+    })
     .then((res) => res.data)
     .catch((err) => err.response.data);
 };
 
-const getActivity = ({ activityId, token }) => {
+const getActivity = ({ activityId, token, appId }) => {
   const cookies = [`SPC_EC=${token}`];
+  const query = {
+    appid: appId,
+    basic: false,
+  };
+
+  const link = `${
+    baseUrl.games
+  }/gameplatform/api/v1/game/activity/${activityId}/settings?${qs.stringify(
+    query
+  )}`;
 
   return axios
-    .get(
-      `${gameBaseUrl}/gameplatform/api/v1/game/activity/${activityId}/settings`,
-      {
-        headers: { Cookie: cookies.join(";") },
-      }
-    )
+    .get(link, {
+      headers: { Cookie: cookies.join(";") },
+    })
     .then((res) => res.data)
     .catch((err) => err.response.data);
 };
 
 const getDailyPrize = () => {
   return axios
-    .get("https://shopee.co.id/Daily-Prize", { maxRedirects: 3 })
+    .get(`${baseUrl.main}/Daily-Prize`, { maxRedirects: 2 })
     .then((res) => {
-      const arr = res.request.path.split("/");
-      return arr[arr.length - 1];
+      const arr = res.request.path.split("?");
+      return arr[0].split("/")[4];
     })
+    .catch((err) => err.response);
+};
+
+const access = ({ activityId, token }) => {
+  const cookies = [`SPC_EC=${token}`];
+  const link = `${baseUrl.luckydraw}/api/v1/luckydraw/${activityId}/reports/access/`;
+
+  return axios
+    .post(
+      link,
+      {},
+      {
+        headers: { Cookie: cookies.join(";") },
+      }
+    )
+    .then((res) => res.data)
     .catch((err) => err.response.data);
 };
 
-module.exports = { claim, chances, getActivity, getDailyPrize };
+module.exports = { claim, chances, getActivity, getDailyPrize, access };

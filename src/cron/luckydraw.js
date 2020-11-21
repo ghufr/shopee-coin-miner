@@ -1,7 +1,8 @@
-require("dotenv").config();
 const luckydraw = require("../packages/luckydraw");
 const account = require("../packages/account");
 const logger = require("../utils/logger");
+
+const { userAgent } = require("../config");
 
 const fs = require("fs");
 
@@ -13,21 +14,36 @@ const fs = require("fs");
 
     for (let i = 0; i < credentials.length; i++) {
       const { shopeeToken, name, userId } = credentials[i];
-      const Ua = process.env.UA;
-      const token = await account.refresh({ shopeeToken, Ua });
+
+      if (!shopeeToken) {
+        continue;
+      }
+
+      // await account.refresh({ shopeeToken, userAgent });
+      const token = await account.getFeatureToggles({
+        userId,
+        userAgent,
+        shopeeToken,
+      });
       // Cek token
       const activityId = await luckydraw.getDailyPrize();
+      const appId = "E9VFyxwmtgjnCR8uhL";
 
       const activity = await luckydraw.getActivity({
+        appId,
         activityId,
         token,
       });
 
+      // const access = await luckydraw.access({ activityId, token });
+
       const eventId = activity.data.basic.event_code;
       const chanceId = activity.data.modules[0].module_id;
-      const appId = "E9VFyxwmtgjnCR8uhL";
 
       const requestId = `${userId}52057634`;
+      // console.log(requestId);
+      // console.log(eventId);
+      // console.log(activityId);
 
       const chances = await luckydraw.chances({
         token,
@@ -35,7 +51,10 @@ const fs = require("fs");
         chanceId,
         appId,
       });
-      if (chances.code === 0 && chances.data.accumulate_chance > 0) {
+
+      // console.log(chances);
+
+      if (chances.data.daily_chance > 0) {
         // Claim hadiah
         const claim = await luckydraw.claim({
           token,
@@ -44,7 +63,7 @@ const fs = require("fs");
           activityId,
           requestId,
         });
-        if (claim.data.prize.prize_type === 2) {
+        if (claim.data && claim.data.prize_type === 2) {
           logger.info(`${name} mendapatkan ${claim.data.package_name}`);
         }
       }

@@ -88,8 +88,8 @@ const claimStatus = ({ token, uid, sessId }) => {
     .catch((err) => err.response.data);
 };
 
-const lockCoin = ({ uid, sessId, token, Ua }) => {
-  const cookies = [`SPC_EC=${token}`, `UA=${Ua}`];
+const lockCoin = ({ uid, sessId, token, userAgent }) => {
+  const cookies = [`SPC_EC=${token}`, `UA=${userAgent}`];
 
   return axios
     .post(

@@ -1,13 +1,12 @@
 const axios = require("axios");
-const baseUrl = "https://games.shopee.co.id";
+const { baseUrl } = require("../../config");
 
-// 3m * 50 =
 const waterCrop = ({ token, cropId, resourceId }) => {
   const cookies = [`SPC_EC=${token}`];
 
   return axios
     .post(
-      `${baseUrl}/farm/api/orchard/crop/water`,
+      `${baseUrl.games}/farm/api/orchard/crop/water`,
       {
         cropId,
         resourceId,
@@ -22,7 +21,7 @@ const getCrop = ({ token }) => {
   const cookies = [`SPC_EC=${token}`];
 
   return axios
-    .get(`${baseUrl}/farm/api/orchard/crop/meta/get`, {
+    .get(`${baseUrl.games}/farm/api/orchard/crop/meta/get`, {
       headers: { Cookie: cookies.join(";") },
     })
     .then((res) => res.data)
@@ -34,7 +33,7 @@ const createCrop = ({ id, token }) => {
 
   return axios
     .post(
-      `${baseUrl}/farm/api/orchard/crop/create`,
+      `${baseUrl.games}/farm/api/orchard/crop/create`,
       { metaId: id },
       {
         headers: { Cookie: cookies.join(";") },
@@ -48,7 +47,7 @@ const getMyCrop = ({ token }) => {
   const cookies = [`SPC_EC=${token}`];
 
   return axios
-    .get(`${baseUrl}/farm/api/orchard/context/get`, {
+    .get(`${baseUrl.games}/farm/api/orchard/context/get`, {
       headers: { Cookie: cookies.join(";") },
     })
     .then((res) => res.data)
@@ -59,7 +58,7 @@ const getMyResource = ({ token }) => {
   const cookies = [`SPC_EC=${token}`];
 
   return axios
-    .get(`${baseUrl}/farm/api/orchard/resource/get`, {
+    .get(`${baseUrl.games}/farm/api/orchard/resource/get`, {
       headers: { Cookie: cookies.join(";") },
     })
     .then((res) => res.data)
@@ -71,7 +70,7 @@ const harvestCrop = ({ token, deviceId, cropId }) => {
 
   return axios
     .post(
-      `${baseUrl}/farm/api/orchard/crop/harvest`,
+      `${baseUrl.games}/farm/api/orchard/crop/harvest`,
       { deviceId, cropId },
       {
         headers: { Cookie: cookies.join(";") },
@@ -93,7 +92,7 @@ const helpFriend = ({
 
   return axios
     .post(
-      `${baseUrl}/farm/api/friend/help`,
+      `${baseUrl.games}/farm/api/friend/help`,
       { friendId, cropId, deviceId, friendName, channel },
       {
         headers: { Cookie: cookies.join(";") },
@@ -108,7 +107,7 @@ const stealWater = ({ token, friendId, friendName, deviceId }) => {
 
   return axios
     .post(
-      `${baseUrl}/farm/api/friend/steal_water`,
+      `${baseUrl.games}/farm/api/friend/steal_water`,
       {
         friendId,
         friendName,
@@ -127,7 +126,7 @@ const canSteal = ({ friendId, token }) => {
   const query = `friendId=${friendId}`;
 
   return axios
-    .get(`${baseUrl}/farm/api/friend/collection_countdown?${query}`, {
+    .get(`${baseUrl.games}/farm/api/friend/collection_countdown?${query}`, {
       headers: { Cookie: cookies.join(";") },
     })
     .then((res) => res.data)
@@ -143,7 +142,7 @@ const getFriend = ({ friendId, token }) => {
   const cookies = [`SPC_EC=${token}`];
 
   return axios
-    .get(`${baseUrl}/farm/api/friend/orchard/context/get?${query}`, {
+    .get(`${baseUrl.games}/farm/api/friend/orchard/context/get?${query}`, {
       headers: { Cookie: cookies.join(";") },
     })
     .then((res) => res.data)
@@ -163,39 +162,3 @@ module.exports = {
   canHelp,
   getFriend,
 };
-
-/**
- * {
-  code: 0,
-  msg: 'success',
-  data: {
-    crop: {
-      id: 10796224,
-      userId: 95544610,
-      metaId: 156,
-      exp: 0,
-      state: 100,
-      lifeStatus: 0,
-      rewardId: 0,
-      createTime: 1596384275256,
-      modifyTime: 1597981603091,
-      deadTime: 0,
-      selfWaterTime: 1597981603091,
-      meta: [Object],
-      harvestTime: 0
-    },
-    resource: {
-      id: 28116740,
-      metaId: 1,
-      number: 3,
-      lastAutoWaterTime: 0,
-      resumeLeftSeconds: 10150,
-      meta: [Object],
-      isFirst: false
-    },
-    rewards: [],
-    useNumber: 47
-  }
-}
-
- */

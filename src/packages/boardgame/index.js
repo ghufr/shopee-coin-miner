@@ -22,8 +22,15 @@ const roll = ({ eventId, rollId, token, userId, deviceId, shopeeToken }) => {
     .catch((err) => err.response.data);
 };
 
-const rollStatus = ({ eventId, rollId, Ua, userId, deviceId, token }) => {
-  const cookies = [`SPC_EC=${token}`, `UA=${Ua}`];
+const rollStatus = ({
+  eventId,
+  rollId,
+  userAgent,
+  userId,
+  deviceId,
+  token,
+}) => {
+  const cookies = [`SPC_EC=${token}`, `UA=${userAgent}`];
 
   return axios
     .get(`${baseUrl}/api/boardgame-be/v1/events/${eventId}/state/${rollId}`, {

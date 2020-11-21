@@ -1,11 +1,13 @@
 const axios = require("axios");
-const baseUrl = "https://feeds.shopee.co.id";
+const { baseUrl } = require("../../config");
 
 const getTimeline = ({ userId, limit }) => {
   // const cookies = [`SPC_EC=${token}`];
 
   return axios
-    .get(`${baseUrl}/api/proxy/timeline/user?limit=${limit}&user_id=${userId}`)
+    .get(
+      `${baseUrl.feeds}/api/proxy/timeline/user?limit=${limit}&user_id=${userId}`
+    )
     .then((res) => res.data)
     .catch((err) => err.response.data);
 };
@@ -13,7 +15,7 @@ const getTimeline = ({ userId, limit }) => {
 const likePost = () => {
   return axios({
     method: "POST",
-    baseUrl,
+    baseUrl: baseUrl.feeds,
     url: "/api/proxy/like",
     headers: {
       Cookie: "",
@@ -26,7 +28,7 @@ const commentPost = ({ token, feedId, comment }) => {
 
   return axios
     .post(
-      `${baseUrl}/api/proxy/comment`,
+      `${baseUrl.feeds}/api/proxy/comment`,
       {
         feed_id: feedId,
         comment,
