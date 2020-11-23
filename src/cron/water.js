@@ -112,7 +112,7 @@ const display = ({ state, exp, name, totExp }) => {
             }
             // Get all available crop
             const crops = await tanam.getCrop({ token });
-            const nCrop = crops.data.cropMetas[0];
+            const nCrop = crops.data.cropMetas[1];
 
             // Tanam crop
             const plant = await tanam.createCrop({ id: nCrop.id, token });
