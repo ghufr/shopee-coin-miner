@@ -7,10 +7,11 @@ const baseUrl = {
   rating: "https://rating.shopee.co.id",
   live: "https://live.shopee.co.id",
   feeds: "https://feeds.shopee.co.id",
+  play: "https://play.shopee.co.id",
 };
 
 const userAgent = "Shopee Android Beeshop locale/id version=378 appver=26011";
-const cropId = "";
+const cropId = 389;
 const appId = "";
 
 module.exports = { baseUrl, userAgent, cropId };

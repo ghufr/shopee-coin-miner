@@ -1,5 +1,8 @@
 const tanam = require("../packages/tanam");
+const account = require("../packages/account");
+
 const logger = require("../utils/logger");
+const { userAgent, cropId } = require("../config");
 
 const fs = require("fs").promises;
 
@@ -23,10 +26,15 @@ const display = ({ state, exp, name, totExp }) => {
     const addFriends = JSON.parse(rawf || []);
 
     for (let i = 0; i < credentials.length; i++) {
-      const { token, deviceId, name } = credentials[i];
+      const { deviceId, name, userId, shopeeToken } = credentials[2];
       const friends = [...credentials, ...addFriends];
       friends.splice(i, 1);
 
+      const token = await account.getFeatureToggles({
+        userId,
+        shopeeToken,
+        userAgent,
+      });
       const myCrop = await tanam.getMyCrop({ token });
 
       if (myCrop.code === 0) {
@@ -97,7 +105,7 @@ const display = ({ state, exp, name, totExp }) => {
           const currCrop = myNewCrop.data.crops[0];
 
           // Check crop state
-          if (currCrop.state === 100) {
+          if (currCrop.state === 100 || currCrop.state == 101) {
             // Harvest crop
             const harvest = await tanam.harvestCrop({
               token,
@@ -105,14 +113,15 @@ const display = ({ state, exp, name, totExp }) => {
               cropId: currCrop.id,
             });
             if (harvest.code === 0) {
-              const reward =
-                harvest.data.reward.rewardItems[0].itemExtraData
-                  .luckyDrawAwardValue;
+              const reward = harvest.data.reward.rewardItems[0].num;
+
               logger.info(`${name} mendapatkan ${reward} koin`);
             }
             // Get all available crop
             const crops = await tanam.getCrop({ token });
-            const nCrop = crops.data.cropMetas[1];
+            const nCrop = crops.data.cropMetas.filter(
+              (crop) => crop.id === cropId
+            )[0];
 
             // Tanam crop
             const plant = await tanam.createCrop({ id: nCrop.id, token });
