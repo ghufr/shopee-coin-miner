@@ -26,7 +26,7 @@ const display = ({ state, exp, name, totExp }) => {
     const addFriends = JSON.parse(rawf || []);
 
     for (let i = 0; i < credentials.length; i++) {
-      const { deviceId, name, userId, shopeeToken } = credentials[2];
+      const { deviceId, name, userId, shopeeToken } = credentials[i];
       const friends = [...credentials, ...addFriends];
       friends.splice(i, 1);
 
@@ -101,17 +101,23 @@ const display = ({ state, exp, name, totExp }) => {
         }
 
         const myNewCrop = await tanam.getMyCrop({ token });
+
         if (myNewCrop.code === 0) {
           const currCrop = myNewCrop.data.crops[0];
-
           // Check crop state
-          if (currCrop.state === 100 || currCrop.state == 101) {
+          // console.log(currCrop);
+          if (
+            currCrop.state === 100 ||
+            currCrop.state === 101 ||
+            currCrop.state === 2
+          ) {
             // Harvest crop
             const harvest = await tanam.harvestCrop({
               token,
               deviceId,
               cropId: currCrop.id,
             });
+
             if (harvest.code === 0) {
               const reward = harvest.data.reward.rewardItems[0].num;
 
