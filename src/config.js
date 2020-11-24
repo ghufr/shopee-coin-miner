@@ -12,6 +12,7 @@ const baseUrl = {
 
 const userAgent = "Shopee Android Beeshop locale/id version=378 appver=26011";
 const cropId = 389;
-const appId = "";
+const appId = "E9VFyxwmtgjnCR8uhL";
+const boardGameId = "58782b068eee6cfd";
 
-module.exports = { baseUrl, userAgent, cropId };
+module.exports = { baseUrl, userAgent, cropId, appId, boardGameId };

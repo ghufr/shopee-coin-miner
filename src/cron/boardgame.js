@@ -1,23 +1,23 @@
 const fs = require("fs");
 const boardgame = require("../packages/boardgame");
 const account = require("../packages/account");
-const { userAgent } = require("../config");
+const { userAgent, boardGameId } = require("../config");
 
 const logger = require("../utils/logger");
 
 (async () => {
   try {
-    console.log("No Longer exist");
-    return;
-
     const raw = fs.readFileSync("credentials.json");
     const credentials = JSON.parse(raw);
 
     const rollId = 10958;
-    const eventId = "37e5615c7e1e02e3";
 
     for (let i = 0; i < credentials.length; i++) {
       const { userId, deviceId, shopeeToken, name } = credentials[i];
+
+      if (!shopeeToken) {
+        continue;
+      }
       const token = await account.getFeatureToggles({
         shopeeToken,
         userAgent,
@@ -27,7 +27,7 @@ const logger = require("../utils/logger");
       const rollStatus = await boardgame.rollStatus({
         token,
         rollId,
-        eventId,
+        eventId: boardGameId,
         userAgent,
         userId,
         deviceId,
