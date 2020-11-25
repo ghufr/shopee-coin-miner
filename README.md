@@ -1,4 +1,4 @@
-# Shopee Coin Chaser
+# Shopee Coin Miner
 
 Simple node.js script to automate shopee coin mining.
 
@@ -14,7 +14,7 @@ Simple node.js script to automate shopee coin mining.
 - Shopee Tanam (self watering, harvesting, planting, help friends)
 - Shopee Checkin (auto checkin)
 - Shopee Lucky Draw (auto draw)
-- ~~Shopee Poly (Boardgame)~~ (No longer exist)
+- Shopee Poly (Boardgame)
 - Shopee Live
 
 ### Next Feature
