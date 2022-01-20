@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
-  "private": true,
+  "private": false,
   "dependencies": {
     "axios": "^0.25.0",
     "cookie": "^0.4.1",
@@ -15,5 +15,10 @@
   },
   "devDependencies": {
     "eslint": "^8.7.0"
-  }
+  },
+  "keywords": [
+    "Shopee",
+    "Bot",
+    "Scripts"
+  ]
 }
