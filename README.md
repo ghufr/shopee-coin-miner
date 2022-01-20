@@ -1,31 +1,23 @@
 # Shopee Coin Miner
 
-Simple node.js script to automate shopee coin mining.
+Simple node.js script to automate shopee coin mining (🇮🇩)
 
-## Features
+## ⚠️ Disclaimer
 
-### Work In Progres
+Using this script violate Shopee Terms of Service, do at your own risk!
 
-- Shopee Goyang Pohon
-- Shopee Capit
+## 🛠️ Features
 
-### Done Feature
-
-- Shopee Tanam (self watering, harvesting, planting, help friends)
-- Shopee Checkin (auto checkin)
-- Shopee Lucky Draw (auto draw)
-- Shopee Poly (Boardgame)
-- Shopee Live
-
-### Next Feature
-
-- Shopee feed (auto comment & like)
-- Shopee review (photo, video, comment, rating)
-
-### Future
-
-- shopee-auto-cart
-- cli?
+| Feature          | Status | Note                                              |
+| ---------------- | ------ | ------------------------------------------------- |
+| Shopee Tanam     | ✅     | self watering, harvesting, planting, help friends |
+| Shopee Check In  | ✅     |
+| Shopee Live      | ✅     |
+| Lucky Draw       | ❌     |
+| Poly (Boardgame) | ❌     |
+| Goyang Pohon     | ❌     |
+| Shopee Capit     | ❌     |
+| Shopee review    | ❌     |
 
 ## How to use
 
@@ -36,15 +28,21 @@ Simple node.js script to automate shopee coin mining.
 
 ### Setup
 
-- Create credentials.json
-  | field | type | desc |
-  |------------- |--------- |------------------------------------------------------------------ |
-  | name | string | shopee username |
-  | token | string | SPC_EC token |
-  | shopeeToken | string | shopee_token |
-  | deviceId | string | one device one id, one deviceId can be used for multiple account |
-  | userId | int | shopee account id |
-  | help | boolean | Help other people? |
+- Create `credentials.json` : Store all credentials data about users
+
+  ```json
+  [
+    {
+      "name": "shopee username",
+      "token": "SPC_EC token",
+      "shopeeToken": "shopee_token",
+      "deviceId": "unique identifier",
+      "userId": 123, // shopee userId
+      "help": true // Help others
+    }
+    // Another users
+  ]
+  ```
 
   To find `shopeeToken` and `token` you can use `HTTPCanary` to capture shopee app data using rooted android device. Here's some quick steps:
 
@@ -61,12 +59,12 @@ Simple node.js script to automate shopee coin mining.
 
 ### Running
 
-`node ./src/cron/`[command_name]
+`node ./src/scripts/`[command_name]
 
 #### List of commands
 
-- water.js: plan, water, harvest, and help friend
-- luckdraw.js: get coint from playing shopee luckydraw
-- live.js: get coin from watching livestream
-- checkin.js: get coin from daily checkin.
-- userCoins.js: get coin of all accounts
+- `water.js`: plan, water, harvest, and help friend
+- `luckdraw.js`: get coin from playing shopee luckydraw
+- `live.js`: get coin from watching livestream
+- `checkin.js`: get coin from daily checkin.
+- `userCoins.js`: get coin balance of all the accounts

@@ -35,7 +35,7 @@ const logger = require("../utils/logger");
 
       if (rollStatus.data && rollStatus.data.token.remaining > 0) {
         const roll = await boardgame.roll({
-          eventId,
+          // eventId,
           rollId,
           token,
           userId,

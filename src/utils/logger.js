@@ -1,5 +1,5 @@
 const { createLogger, format, transports } = require("winston");
-const winston = require("winston/lib/winston/config");
+require("winston/lib/winston/config");
 require("winston-daily-rotate-file");
 
 const logger = createLogger({

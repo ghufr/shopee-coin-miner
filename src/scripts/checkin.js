@@ -23,13 +23,11 @@ const fs = require("fs");
 
       const checkin = await coins.checkin({ token });
 
-      // console.log(checkin);
-
       if (checkin.code === 0 && checkin.data.success) {
         logger.info(`${name} mendapatkan ${checkin.data.increase_coins} koin`);
       }
     }
   } catch (err) {
-    console.log(err);
+    logger.error(err);
   }
 })();
