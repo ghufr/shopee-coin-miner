@@ -1,10 +1,12 @@
 # Shopee Coin Miner
 
-Simple node.js script to automate shopee coin mining (🇮🇩)
+Simple `nodejs` script to earn shopee coin automatically (🇮🇩)
 
 ## ⚠️ Disclaimer
 
-Using this script violate Shopee Terms of Service, do at your own risk!
+- Using this script violate Shopee Terms of Service, do at your own risk!
+
+- Only work for Indonesian Shopee (shopee.co.id)
 
 ## 🛠️ Features
 
@@ -23,12 +25,12 @@ Using this script violate Shopee Terms of Service, do at your own risk!
 
 ### Requirements
 
-- node.js >= 10
-- Rooted Android phone (emulator / smartphone) (used only once)
+- `nodejs` >= 10
+- Rooted Android phone (emulator / smartphone) (used to get user credentials)
 
 ### Setup
 
-- Create `credentials.json` : Store all credentials data about users
+- Create `credentials.json` : List of all credentials of your accounts
 
   ```json
   [
@@ -37,25 +39,33 @@ Using this script violate Shopee Terms of Service, do at your own risk!
       "token": "SPC_EC token",
       "shopeeToken": "shopee_token",
       "deviceId": "unique identifier",
-      "userId": 123, // shopee userId
-      "help": true // Help others
+      "userId": 123,
+      "help": true
     }
-    // Another users
   ]
   ```
 
   To find `shopeeToken` and `token` you can use `HTTPCanary` to capture shopee app data using rooted android device. Here's some quick steps:
 
-  - Install HTTPCanary
-  - Enable capture in HTTPCanary
+  - Install `HTTPCanary`
+  - Enable capture in `HTTPCanary`
   - Open Shopee app
   - Login using your account
-  - Open HTTPCanary
+  - Open `HTTPCanary`
   - Filter by host (mall.shopee.co.id)
   - Find authenticated request
-  - Copy SPC_EC, and shopee_token in cookies
+  - Copy `SPC_EC`, and `shopee_token` in cookies
 
-- Create friends.json
+- Create `friends.json` : List of friends account you want to help
+  ```json
+  [
+    {
+      "name": "shopee_username",
+      "userId": 0,
+      "help": true
+    }
+  ]
+  ```
 
 ### Running
 
